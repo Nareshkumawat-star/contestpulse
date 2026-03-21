@@ -101,10 +101,27 @@ ipcMain.on('window-move', (event, x, y) => {
 
 ipcMain.on('set-window-size', (event, w, h) => {
     if (mainWindow) {
+        const { screen } = require('electron');
+        const primaryDisplay = screen.getPrimaryDisplay();
+        const workArea = primaryDisplay.workArea;
         const bounds = mainWindow.getBounds();
-        const newX = bounds.x + (bounds.width - w);
-        const newY = bounds.y + (bounds.height - h);
-        mainWindow.setBounds({ x: newX, y: newY, width: w, height: h });
+
+        // Calculate potential new bounds (expanding relative to bottom-right)
+        let newX = bounds.x + (bounds.width - w);
+        let newY = bounds.y + (bounds.height - h);
+
+        // SMART CLAMPING: If the new position would go off-screen, push it back in
+        if (newX < workArea.x) newX = workArea.x;
+        if (newY < workArea.y) newY = workArea.y;
+        if (newX + w > workArea.x + workArea.width) newX = workArea.x + workArea.width - w;
+        if (newY + h > workArea.y + workArea.height) newY = workArea.y + workArea.height - h;
+
+        mainWindow.setBounds({ 
+            x: Math.round(newX), 
+            y: Math.round(newY), 
+            width: Math.round(w), 
+            height: Math.round(h) 
+        });
     }
 });
 
