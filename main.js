@@ -11,7 +11,7 @@ function createWindow() {
         frame: false,
         transparent: true,
         alwaysOnTop: true,
-        resizable: true,
+        type: 'toolbar', // Helps with stay-on-top and taskbar behavior
         skipTaskbar: false,
         hasShadow: true,
         webPreferences: {
@@ -22,6 +22,7 @@ function createWindow() {
     });
 
     mainWindow.loadFile('index.html');
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
 
     // Position in bottom-right corner on startup
     const { screen } = require('electron');
@@ -29,6 +30,11 @@ function createWindow() {
     mainWindow.setPosition(width - 250, height - 250);
 
     mainWindow.on('closed', () => { mainWindow = null; });
+    
+    // Ensure it stays on top even if focus is lost
+    mainWindow.on('blur', () => {
+        mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    });
 }
 
 function createTray() {
