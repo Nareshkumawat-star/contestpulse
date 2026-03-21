@@ -1,0 +1,42 @@
+{
+  "name": "contest-widget",
+  "version": "1.0.0",
+  "description": "Smart Coding Contest Desktop Widget",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "dist": "electron-builder",
+    "package": "electron-packager . ContestPulse --platform=win32 --arch=x64 --out=dist --icon=icon.png --overwrite"
+  },
+  "keywords": [
+    "electron",
+    "widget",
+    "competitive-programming"
+  ],
+  "author": "ContestPulse Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.3",
+    "electron-packager": "^17.1.2",
+    "electron-reloader": "^1.2.3"
+  },
+  "build": {
+    "appId": "com.contestpulse.widget",
+    "productName": "ContestPulse",
+    "win": {
+      "target": "portable",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true
+    },
+    "files": [
+      "**/*",
+      "!dist"
+    ]
+  }
+}
