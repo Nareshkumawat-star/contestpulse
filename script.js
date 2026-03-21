@@ -80,6 +80,7 @@ const lastRefresh = document.getElementById('lastRefresh');
 const filterBar = document.getElementById('filterBar');
 const typeFilterBar = document.getElementById('typeFilterBar');
 const settingsPanel = document.getElementById('settingsPanel');
+const aboutPanel = document.getElementById('aboutPanel');
 const onlineStatus = document.getElementById('onlineStatus');
 
 // ── Platform display helpers ───────────────────────────────────
@@ -893,8 +894,18 @@ function saveSettings() {
     const notifCustomMin = parseInt(document.getElementById('notifCustomMin').value, 10) || 10;
     const notifAtStart = document.getElementById('notifAtStart').checked;
     const ntfyTopic = document.getElementById('ntfyTopic').value.trim();
-    settings = { prefPlatforms, skillLevel, notifCustomHourCb, notifCustomHour, notifCustomCb, notifCustomMin, notifAtStart, ntfyTopic };
+    const autostart = document.getElementById('autostartCb').checked;
+    const skipTaskbar = document.getElementById('skipTaskbarCb').checked;
+
+    settings = { prefPlatforms, skillLevel, notifCustomHourCb, notifCustomHour, notifCustomCb, notifCustomMin, notifAtStart, ntfyTopic, autostart, skipTaskbar };
     localStorage.setItem('contestWidgetSettings', JSON.stringify(settings));
+    
+    // Apply system settings immediately
+    if (window.electronAPI) {
+        window.electronAPI.setAutostart(autostart);
+        window.electronAPI.setSkipTaskbar(skipTaskbar);
+    }
+
     closeSettingsPanel();
     refresh();
 }
@@ -922,6 +933,10 @@ function openSettingsPanel() {
     document.getElementById('notifAtStart').checked = settings.notifAtStart !== false;
 
     document.getElementById('ntfyTopic').value = settings.ntfyTopic || '';
+    
+    document.getElementById('autostartCb').checked = settings.autostart === true;
+    document.getElementById('skipTaskbarCb').checked = settings.skipTaskbar !== false;
+
     settingsPanel.classList.add('open');
 }
 
@@ -929,7 +944,21 @@ function closeSettingsPanel() {
     settingsPanel.classList.remove('open');
 }
 
-document.getElementById('settingsBtn').addEventListener('click', openSettingsPanel);
+function openAboutPanel() {
+    closeSettingsPanel();
+    aboutPanel.classList.add('open');
+}
+
+function closeAboutPanel() {
+    aboutPanel.classList.remove('open');
+}
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+    closeAboutPanel();
+    openSettingsPanel();
+});
+document.getElementById('aboutBtn').addEventListener('click', openAboutPanel);
+document.getElementById('closeAbout').addEventListener('click', closeAboutPanel);
 document.getElementById('closeSettings').addEventListener('click', closeSettingsPanel);
 document.getElementById('saveSettings').addEventListener('click', saveSettings);
 
@@ -975,7 +1004,18 @@ function truncate(str, max) {
     return str.length > max ? str.slice(0, max - 1) + '…' : str;
 }
 
+function bootSystemSettings() {
+    if (!window.electronAPI) return;
+    
+    // Apply autostart (default true if not set)
+    window.electronAPI.setAutostart(settings.autostart !== false);
+    
+    // Apply skipTaskbar (default true if not set)
+    window.electronAPI.setSkipTaskbar(settings.skipTaskbar !== false);
+}
+
 // ── Boot ───────────────────────────────────────────────────────
 setMiniMode(true);
+bootSystemSettings();
 refresh();
 startAutoRefresh();

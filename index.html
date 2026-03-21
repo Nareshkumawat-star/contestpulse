@@ -39,6 +39,7 @@
         </div>
         <div class="titlebar-right">
           <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
+          <button class="icon-btn" id="aboutBtn" title="About & Help">?</button>
           <button class="icon-btn" id="settingsBtn" title="Settings">⚙</button>
           <button class="icon-btn" id="minimizeBtn" title="Minimize">−</button>
           <button class="icon-btn" id="maximizeBtn" title="Maximize">□</button>
@@ -129,8 +130,78 @@
             Get <b>offline notifications</b> on mobile (works even when PC is off) via ntfy app.
           </small>
         </div>
+ 
+        <div class="settings-section">
+          <label class="section-label">System</label>
+          <label class="settings-row">
+            <input type="checkbox" id="autostartCb" /> Launch automatically at startup
+          </label>
+          <label class="settings-row">
+            <input type="checkbox" id="skipTaskbarCb" checked /> Hide from taskbar (Tray only)
+          </label>
+        </div>
 
         <button class="save-btn" id="saveSettings">Save Preferences</button>
+      </div>
+
+      <!-- About & Help panel (hidden by default) -->
+      <div class="settings-panel about-panel" id="aboutPanel">
+        <div class="settings-header">
+          <span>❓ About & Help</span>
+          <button class="icon-btn" id="closeAbout">×</button>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Connect Notifications</label>
+          <div class="about-steps">
+            <div class="step">
+              <span class="step-num">1</span>
+              <p>Install the <b>ntfy</b> app on your Android or iOS device.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">2</span>
+              <p>Open the app and click <b>+</b> to subscribe to a new topic.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">3</span>
+              <p>Enter a unique topic name (e.g., <code>contest-pulse-yourname</code>).</p>
+            </div>
+            <div class="step">
+              <span class="step-num">4</span>
+              <p>Go to <b>Settings ⚙</b> in this widget and enter the <b>same topic name</b>.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">5</span>
+              <p>Click <b>Save</b>. You will now receive offline alerts on your phone!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">What Users Say</label>
+          <div class="testimonials">
+            <div class="testimonial">
+              <p>"Never missed a Codeforces round since I started using this. The mobile sync is a game changer!"</p>
+              <span class="author">— Rohit S.</span>
+            </div>
+            <div class="testimonial">
+              <p>"The UI is so clean and it stays out of the way. Highly recommended for competitive programmers."</p>
+              <span class="author">— Ananya M.</span>
+            </div>
+            <div class="testimonial">
+              <p>"The 'Live' indicator is super helpful for tracking ongoing contests at a glance."</p>
+              <span class="author">— Kevin D.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">App Info</label>
+          <div class="settings-row" style="opacity: 0.7; font-size: 11px;">
+            Version: 1.2.0<br>
+            Developer: Naresh Kumawat
+          </div>
+        </div>
       </div>
 
       <!-- Footer -->

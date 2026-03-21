@@ -6,8 +6,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --dev",
-    "dist": "electron-builder",
-    "package": "electron-packager . ContestPulse --platform=win32 --arch=x64 --out=dist --icon=icon.png --overwrite"
+    "dist": "electron-builder"
   },
   "keywords": [
     "electron",
@@ -19,26 +18,39 @@
   "devDependencies": {
     "electron": "^29.0.0",
     "electron-builder": "^24.13.3",
-    "electron-installer-windows": "^3.0.0",
     "electron-packager": "^17.1.2",
-    "electron-reloader": "^1.2.3",
-    "electron-winstaller": "^5.4.0"
+    "electron-reloader": "^1.2.3"
   },
   "build": {
     "appId": "com.contestpulse.widget",
     "productName": "ContestPulse",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
     "win": {
-      "target": "nsis",
+      "target": [
+        "zip",
+        "nsis",
+        "portable"
+      ],
       "icon": "icon.png"
     },
     "nsis": {
       "oneClick": true,
       "allowToChangeInstallationDirectory": false,
-      "createDesktopShortcut": true
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ContestPulse"
     },
     "files": [
       "**/*",
-      "!dist"
+      "!dist",
+      "!*.md",
+      "!*.ps1",
+      "!create_installer.js",
+      "!.gitignore",
+      "!.git"
     ]
   }
 }

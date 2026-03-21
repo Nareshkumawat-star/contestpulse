@@ -12,7 +12,7 @@ function createWindow() {
         transparent: true,
         alwaysOnTop: false, // Changed from true to false
         type: 'desktop', // Tries to pin it to desktop layer on some OS models
-        skipTaskbar: false,
+        skipTaskbar: true,
         hasShadow: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -32,8 +32,9 @@ function createWindow() {
 }
 
 function createTray() {
-    // Use a simple blank icon since we can't rely on file icons
-    const icon = nativeImage.createEmpty();
+    // Use icon.png for the tray icon
+    const iconPath = path.join(__dirname, 'icon.png');
+    const icon = nativeImage.createFromPath(iconPath);
     tray = new Tray(icon);
 
     const contextMenu = Menu.buildFromTemplate([
@@ -143,4 +144,17 @@ ipcMain.on('maximize-window', () => {
 
 ipcMain.on('close-window', () => {
     if (mainWindow) mainWindow.hide();
+});
+
+ipcMain.on('set-autostart', (event, enable) => {
+    app.setLoginItemSettings({
+        openAtLogin: enable,
+        path: app.getPath('exe')
+    });
+});
+
+ipcMain.on('set-skip-taskbar', (event, skip) => {
+    if (mainWindow) {
+        mainWindow.setSkipTaskbar(skip);
+    }
 });
