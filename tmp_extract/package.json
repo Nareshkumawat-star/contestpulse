@@ -1,0 +1,8 @@
+{
+  "name": "contest-widget",
+  "version": "1.0.0",
+  "description": "Smart Coding Contest Desktop Widget",
+  "main": "main.js",
+  "author": "ContestPulse Team",
+  "license": "MIT"
+}

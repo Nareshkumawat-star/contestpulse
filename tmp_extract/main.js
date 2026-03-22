@@ -4,6 +4,10 @@ const path = require('path');
 let mainWindow;
 let tray;
 
+// FIX: Change userData path to a new folder to bypass "Access is denied" errors
+const userDataPath = path.join(app.getPath('appData'), 'contest-pulse-data');
+app.setPath('userData', userDataPath);
+
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 200,
@@ -111,11 +115,11 @@ ipcMain.on('set-window-size', (event, w, h) => {
         if (newX + w > workArea.x + workArea.width) newX = workArea.x + workArea.width - w;
         if (newY + h > workArea.y + workArea.height) newY = workArea.y + workArea.height - h;
 
-        mainWindow.setBounds({
-            x: Math.round(newX),
-            y: Math.round(newY),
-            width: Math.round(w),
-            height: Math.round(h)
+        mainWindow.setBounds({ 
+            x: Math.round(newX), 
+            y: Math.round(newY), 
+            width: Math.round(w), 
+            height: Math.round(h) 
         });
     }
 });

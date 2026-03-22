@@ -512,6 +512,7 @@ function scheduleNotifications(contest) {
                     body: messageBodyNtfy
                 }).catch(e => console.error('ntfy err:', e));
             }
+
         };
 
         // --- NEW: Sync to ntfy.sh for OFFLINE support ---
@@ -906,7 +907,7 @@ function saveSettings() {
 
     settings = { prefPlatforms, skillLevel, notifCustomHourCb, notifCustomHour, notifCustomCb, notifCustomMin, notifAtStart, ntfyTopic, autostart, skipTaskbar };
     localStorage.setItem('contestWidgetSettings', JSON.stringify(settings));
-
+    
     // Apply system settings immediately
     if (window.electronAPI) {
         window.electronAPI.setAutostart(autostart);
@@ -940,7 +941,7 @@ function openSettingsPanel() {
     document.getElementById('notifAtStart').checked = settings.notifAtStart !== false;
 
     document.getElementById('ntfyTopic').value = settings.ntfyTopic || '';
-
+    
     document.getElementById('autostartCb').checked = settings.autostart === true;
     document.getElementById('skipTaskbarCb').checked = settings.skipTaskbar !== false;
 
@@ -968,6 +969,8 @@ document.getElementById('aboutBtn').addEventListener('click', openAboutPanel);
 document.getElementById('closeAbout').addEventListener('click', closeAboutPanel);
 document.getElementById('closeSettings').addEventListener('click', closeSettingsPanel);
 document.getElementById('saveSettings').addEventListener('click', saveSettings);
+
+// Test functions removed for simplified notifications
 
 
 
@@ -1013,10 +1016,10 @@ function truncate(str, max) {
 
 function bootSystemSettings() {
     if (!window.electronAPI) return;
-
+    
     // Apply autostart (default true if not set)
     window.electronAPI.setAutostart(settings.autostart !== false);
-
+    
     // Apply skipTaskbar (default true if not set)
     window.electronAPI.setSkipTaskbar(settings.skipTaskbar !== false);
 }
