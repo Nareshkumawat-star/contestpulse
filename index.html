@@ -121,13 +121,30 @@
           </label>
         </div>
 
+  
         <div class="settings-section">
-          <label class="section-label">Mobile Notifications</label>
+          <label class="section-label">WhatsApp Notifications</label>
           <div class="settings-row">
-            <input type="text" id="ntfyTopic" class="text-input" placeholder="Enter topic name..." />
+            <input type="text" id="waPhone" class="text-input" placeholder="Phone (e.g. +919876543210)" />
+          </div>
+          <div class="settings-row" style="margin-top: 5px;">
+            <input type="text" id="waApiKey" class="text-input" placeholder="CallMeBot API Key" />
           </div>
           <small class="settings-tip">
-            Get <b>offline notifications</b> on mobile (works even when PC is off) via ntfy app.
+            Get your free API key by sending <code>allow send messages</code> to one of these bots on WhatsApp:
+            <br>• <a href="#" onclick="window.electronAPI.openURL('https://wa.me/34621331709')">+34 621 331 709</a> (Primary)
+            <br>• <a href="#" onclick="window.electronAPI.openURL('https://wa.me/34623786449')">+34 623 78 64 49</a> (Backup 1)
+            <br>• <a href="#" onclick="window.electronAPI.openURL('https://wa.me/34644204756')">+34 644 20 47 56</a> (Backup 2)
+          </small>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Mobile Hub (ntfy)</label>
+          <div class="settings-row">
+            <input type="text" id="ntfyTopic" class="text-input" placeholder="ntfy Topic name..." />
+          </div>
+          <small class="settings-tip">
+            Get <b>offline alerts</b> on Android/iOS via the ntfy app.
           </small>
         </div>
  
@@ -139,6 +156,16 @@
           <label class="settings-row">
             <input type="checkbox" id="skipTaskbarCb" checked /> Hide from taskbar (Tray only)
           </label>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Telegram Notifications</label>
+          <div class="settings-row">
+            <input type="text" id="tgUser" class="text-input" placeholder="Telegram @username" />
+          </div>
+          <small class="settings-tip">
+            Get stable alerts via Telegram! Send <b>/start</b> to <a href="#" onclick="window.electronAPI.openURL('https://t.me/callmebot_txtbot')">@callmebot_txtbot</a> first.
+          </small>
         </div>
 
         <button class="save-btn" id="saveSettings">Save Preferences</button>
@@ -172,7 +199,11 @@
             </div>
             <div class="step">
               <span class="step-num">5</span>
-              <p>Click <b>Save</b>. You will now receive offline alerts on your phone!</p>
+              <p>For **Telegram**: Send <b>/start</b> to <a href="#" onclick="window.electronAPI.openURL('https://t.me/callmebot_txtbot')">@callmebot_txtbot</a> on Telegram, then entered your @username in the ⚙ <b>Settings</b> panel.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">6</span>
+              <p>Click <b>Save</b>. You will now receive offline alerts on your chosen messenger!</p>
             </div>
           </div>
         </div>

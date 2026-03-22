@@ -512,6 +512,13 @@ function scheduleNotifications(contest) {
                     body: messageBodyNtfy
                 }).catch(e => console.error('ntfy err:', e));
             }
+
+            // --- WhatsApp (CallMeBot) ---
+            if (settings.waPhone && settings.waApiKey) {
+                const waMessage = encodeURIComponent(messageTitle + "\n" + messageBodyNtfy);
+                const waUrl = `https://api.callmebot.com/whatsapp.php?phone=${settings.waPhone.replace(/\+/g, '')}&text=${waMessage}&apikey=${settings.waApiKey}`;
+                fetch(waUrl).catch(e => console.error('WhatsApp err:', e));
+            }
         };
 
         // --- NEW: Sync to ntfy.sh for OFFLINE support ---
@@ -894,10 +901,12 @@ function saveSettings() {
     const notifCustomMin = parseInt(document.getElementById('notifCustomMin').value, 10) || 10;
     const notifAtStart = document.getElementById('notifAtStart').checked;
     const ntfyTopic = document.getElementById('ntfyTopic').value.trim();
+    const waPhone = document.getElementById('waPhone').value.trim();
+    const waApiKey = document.getElementById('waApiKey').value.trim();
     const autostart = document.getElementById('autostartCb').checked;
     const skipTaskbar = document.getElementById('skipTaskbarCb').checked;
 
-    settings = { prefPlatforms, skillLevel, notifCustomHourCb, notifCustomHour, notifCustomCb, notifCustomMin, notifAtStart, ntfyTopic, autostart, skipTaskbar };
+    settings = { prefPlatforms, skillLevel, notifCustomHourCb, notifCustomHour, notifCustomCb, notifCustomMin, notifAtStart, ntfyTopic, waPhone, waApiKey, autostart, skipTaskbar };
     localStorage.setItem('contestWidgetSettings', JSON.stringify(settings));
     
     // Apply system settings immediately
@@ -933,6 +942,8 @@ function openSettingsPanel() {
     document.getElementById('notifAtStart').checked = settings.notifAtStart !== false;
 
     document.getElementById('ntfyTopic').value = settings.ntfyTopic || '';
+    document.getElementById('waPhone').value = settings.waPhone || '';
+    document.getElementById('waApiKey').value = settings.waApiKey || '';
     
     document.getElementById('autostartCb').checked = settings.autostart === true;
     document.getElementById('skipTaskbarCb').checked = settings.skipTaskbar !== false;
