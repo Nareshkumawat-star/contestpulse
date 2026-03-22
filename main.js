@@ -4,6 +4,10 @@ const path = require('path');
 let mainWindow;
 let tray;
 
+// FIX: Change userData path to a new folder to bypass "Access is denied" errors
+const userDataPath = path.join(app.getPath('appData'), 'contest-pulse-data');
+app.setPath('userData', userDataPath);
+
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 200,
