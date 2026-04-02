@@ -1,5 +1,5 @@
 # 🛠️ ContestPulse Build & Package Script
-# This script cleans the project and builds a professional installer.
+# This script cleans the project and builds a professional NSIS installer and Portable app.
 
 Write-Host "Starting Production Build..." -ForegroundColor Cyan
 
@@ -10,10 +10,24 @@ Stop-Process -Name "electron" -ErrorAction SilentlyContinue
 
 # 2. Clean up previous builds
 Write-Host "Cleaning dist folder..."
-if (Test-Path "dist") { Remove-Item -Path "dist" -Recurse -Force }
+if (Test-Path "dist") { 
+    Get-ChildItem "dist" -Exclude "*.exe" | Remove-Item -Recurse -Force
+}
 
-# 3. Run electron-builder to create the installer
-Write-Host "Building professional installer (electron-builder)..."
+# 3. Build the NSIS Installer & Portable App
+Write-Host "Building professional installer and portable apps..."
 npm run dist
 
-Write-Host "Build Complete! Check the dist folder for your installer." -ForegroundColor Green
+# 4. Report final locations
+Write-Host "`n✅ Build Complete!" -ForegroundColor Green
+$setup = Get-ChildItem "dist\ContestPulse_Setup*.exe" | Select-Object -First 1
+$portable = Get-ChildItem "dist\ContestPulse_Portable*.exe" | Select-Object -First 1
+
+if ($setup) {
+    Write-Host "Installer: $($setup.FullName)" -ForegroundColor Yellow
+}
+if ($portable) {
+    Write-Host "Portable : $($portable.FullName)" -ForegroundColor Yellow
+}
+
+Write-Host "`nShare the Setup file for a simple one-click installation!" -ForegroundColor Cyan

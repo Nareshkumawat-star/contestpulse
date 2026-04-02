@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contest Widget</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div id="appShell" class="app-shell">
+    <!-- MINI APP -->
+    <div id="miniApp" class="mini-app" style="display: none;">
+      <div class="mini-drag-handle">
+        <div class="drag-dots"></div>
+        <div class="drag-label">DRAG TO MOVE</div>
+      </div>
+      <div class="mini-content" id="miniExpandBtn" title="Click to expand">
+        <div class="mini-icon-container">
+          <span id="miniIcon" class="app-icon" style="font-size: 44px;">🏆</span>
+          <div id="miniLiveIndicator" class="mini-live-dot" style="display: none;"></div>
+        </div>
+        <div id="miniNextName" class="mini-name">Loading...</div>
+        <div id="miniNextTime" class="mini-time">--:--:--</div>
+      </div>
+    </div>
+
+    <!-- FULL APP -->
+    <div id="fullApp" class="full-app">
+
+      <!-- Draggable titlebar -->
+      <div class="titlebar" id="titlebar">
+        <div class="titlebar-left">
+          <span class="app-title">ContestPulse</span>
+          <span class="app-icon">🏆</span>
+        </div>
+        <div class="titlebar-right">
+          <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
+          <button class="icon-btn" id="aboutBtn" title="About & Help">?</button>
+          <button class="icon-btn" id="settingsBtn" title="Settings">⚙</button>
+          <button class="icon-btn" id="minimizeBtn" title="Minimize">−</button>
+          <button class="icon-btn" id="maximizeBtn" title="Maximize">□</button>
+          <button class="icon-btn close-btn" id="closeBtn" title="Close">×</button>
+        </div>
+      </div>
+
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span id="contestCount" class="contest-count">Loading...</span>
+        <span id="lastRefresh" class="last-refresh"></span>
+      </div>
+
+      <!-- Navigation Filters -->
+      <div class="filter-bar" id="filterBar">
+        <button class="pill active" data-platform="all">All</button>
+        <button class="pill" data-platform="codeforces">CF</button>
+        <button class="pill" data-platform="leetcode">LC</button>
+        <button class="pill" data-platform="codechef">CC</button>
+        <button class="pill" data-platform="hackerearth">HE</button>
+        <button class="pill" data-platform="hackerrank">HR</button>
+      </div>
+      <div class="filter-bar type-filter-bar" id="typeFilterBar">
+        <button class="pill active" data-type="all">All Types</button>
+        <button class="pill" data-type="regular">Regular / Weekly</button>
+        <button class="pill" data-type="other">Other</button>
+      </div>
+
+      <!-- Contest list -->
+      <div class="contest-list" id="contestList">
+        <div class="loading-state" id="loadingState">
+          <div class="spinner"></div>
+          <p>Fetching contests…</p>
+        </div>
+      </div>
+
+      <!-- Settings panel (hidden by default) -->
+      <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+          <span>⚙ Preferences</span>
+          <button class="icon-btn" id="closeSettings">×</button>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Preferred Platforms</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" value="codeforces" class="pref-platform" /> Codeforces</label>
+            <label><input type="checkbox" value="leetcode" class="pref-platform" /> LeetCode</label>
+            <label><input type="checkbox" value="codechef" class="pref-platform" /> CodeChef</label>
+            <label><input type="checkbox" value="hackerearth" class="pref-platform" /> HackerEarth</label>
+            <label><input type="checkbox" value="hackerrank" class="pref-platform" /> HackerRank</label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Skill Level</label>
+          <div class="settings-radio-group">
+            <label class="radio-row"><input type="radio" name="skillLevel" value="all" checked /> All Levels</label>
+            <label class="radio-row"><input type="radio" name="skillLevel" value="beginner" /> Beginner</label>
+            <label class="radio-row"><input type="radio" name="skillLevel" value="intermediate" /> Intermediate</label>
+            <label class="radio-row"><input type="radio" name="skillLevel" value="advanced" /> Advanced</label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Notifications</label>
+          <div class="settings-row">
+            <input type="checkbox" id="notifCustomHourCb" checked />
+            <input type="number" id="notifCustomHour" class="num-input" value="1" min="1" max="168" />
+            <label for="notifCustomHourCb">hours before</label>
+          </div>
+          <div class="settings-row">
+            <input type="checkbox" id="notifCustomCb" checked />
+            <input type="number" id="notifCustomMin" class="num-input" value="10" min="1" max="1440" />
+            <label for="notifCustomCb">minutes before</label>
+          </div>
+          <label class="settings-row">
+            <input type="checkbox" id="notifAtStart" checked /> At start time (LIVE)
+          </label>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Mobile Notifications</label>
+          <div class="settings-row">
+            <input type="text" id="ntfyTopic" class="text-input" placeholder="Enter topic name..." />
+          </div>
+          <small class="settings-tip">
+            Get <b>offline notifications</b> on mobile (works even when PC is off) via ntfy app.
+          </small>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">System</label>
+          <label class="settings-row">
+            <input type="checkbox" id="autostartCb" /> Launch automatically at startup
+          </label>
+          <label class="settings-row">
+            <input type="checkbox" id="skipTaskbarCb" checked /> Hide from taskbar (Tray only)
+          </label>
+        </div>
+
+        <button class="save-btn" id="saveSettings">Save Preferences</button>
+      </div>
+
+      <!-- About & Help panel (hidden by default) -->
+      <div class="settings-panel about-panel" id="aboutPanel">
+        <div class="settings-header">
+          <span>❓ About & Help</span>
+          <button class="icon-btn" id="closeAbout">×</button>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">Connect Notifications</label>
+          <div class="about-steps">
+            <div class="step">
+              <span class="step-num">1</span>
+              <p>Install the <b>ntfy</b> app on your Android or iOS device.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">2</span>
+              <p>Open the app and click <b>+</b> to subscribe to a new topic.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">3</span>
+              <p>Enter a unique topic name (e.g., <code>contest-pulse-yourname</code>).</p>
+            </div>
+            <div class="step">
+              <span class="step-num">4</span>
+              <p>Go to <b>Settings ⚙</b> in this widget and enter the <b>same topic name</b>.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">5</span>
+              <p>Click <b>Save</b>. You will now receive offline alerts on your phone!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">What Users Say</label>
+          <div class="testimonials">
+            <div class="testimonial">
+              <p>"Never missed a Codeforces round since I started using this. The mobile sync is a game changer!"</p>
+              <span class="author">— Rohit S.</span>
+            </div>
+            <div class="testimonial">
+              <p>"The UI is so clean and it stays out of the way. Highly recommended for competitive programmers."</p>
+              <span class="author">— Ananya M.</span>
+            </div>
+            <div class="testimonial">
+              <p>"The 'Live' indicator is super helpful for tracking ongoing contests at a glance."</p>
+              <span class="author">— Kevin D.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="section-label">App Info</label>
+          <div class="settings-row" style="opacity: 0.7; font-size: 11px;">
+            Version: 1.2.0<br>
+            Developer: Naresh Kumawat
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span class="powered-by">Powered by Kontests API</span>
+        <div class="footer-actions">
+          <span id="onlineStatus" class="online-dot" title="API Status">●</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
+
+</html>

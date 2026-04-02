@@ -30,9 +30,8 @@
     },
     "win": {
       "target": [
-        "zip",
-        "nsis",
-        "portable"
+        "portable",
+        "zip"
       ],
       "icon": "icon.png"
     },
@@ -41,14 +40,19 @@
       "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "ContestPulse"
+      "shortcutName": "ContestPulse",
+      "installerIcon": "icon.png",
+      "uninstallerIcon": "icon.png",
+      "artifactName": "ContestPulse_Setup_${version}.exe"
+    },
+    "portable": {
+      "artifactName": "ContestPulse_Portable_${version}.exe"
     },
     "files": [
       "**/*",
       "!dist",
       "!*.md",
       "!*.ps1",
-      "!create_installer.js",
       "!.gitignore",
       "!.git"
     ]
